@@ -15,60 +15,57 @@
       justify-content: center;
       align-items: center;
       font-family: 'Poppins', sans-serif;
-    }
-
-    #container {
-      text-align: center;
+      overflow: hidden;
     }
 
     h1 {
       font-family: 'Pacifico', cursive;
       color: white;
       font-size: 3rem;
-      margin-bottom: 35px;
+      margin-bottom: 40px;
       text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+      text-align: center;
     }
 
-    .buttons {
-      display: inline-flex;
-      gap: 30px;
+    #container {
       position: relative;
+      text-align: center;
     }
 
-    button {
+    #yesBtn {
       padding: 15px 36px;
       font-size: 18px;
       border: none;
       border-radius: 40px;
-      white-space: nowrap;
-      transition: transform 0.18s ease;
-    }
-
-    #yesBtn {
       background: #ff4d6d;
       color: white;
       cursor: pointer;
       box-shadow: 0 6px 20px rgba(255,77,109,0.4);
+      margin-right: 20px;
     }
 
     #noBtn {
+      padding: 15px 36px;
+      font-size: 18px;
+      border: none;
+      border-radius: 40px;
       background: white;
       color: #ff4d6d;
       cursor: pointer;
       box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-      position: relative;
+      position: absolute;
     }
 
     #message {
       display: none;
-      color: white;
-      font-size: 2rem;
       margin-top: 30px;
-      animation: pop 0.5s ease;
+      font-size: 2rem;
+      color: white;
+      animation: pop 0.6s ease;
     }
 
     @keyframes pop {
-      from { transform: scale(0.7); opacity: 0; }
+      from { transform: scale(0.6); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
   </style>
@@ -78,14 +75,10 @@
 <div id="container">
   <h1>Will you be my Valentine? 💘</h1>
 
-  <div class="buttons">
-    <button id="yesBtn">Yes 💕</button>
-    <button id="noBtn">No 💔</button>
-  </div>
+  <button id="yesBtn">Yes 💕</button>
+  <button id="noBtn">No 💔</button>
 
-  <div id="message">
-    I knew you’d say YES 😘❤️
-  </div>
+  <div id="message">I knew you’d say YES 😘❤️</div>
 </div>
 
 <script>
@@ -93,32 +86,34 @@
   const yesBtn = document.getElementById("yesBtn");
   const message = document.getElementById("message");
 
-  let index = 0;
+  // Place NO initially somewhere near center
+  moveNoButton();
 
-  // Far enough to dodge, not far enough to teleport
-  const moves = [
-    { x: 60, y: 0 },
-    { x: -60, y: 0 },
-    { x: 40, y: 30 },
-    { x: -40, y: -30 },
-    { x: 0, y: 45 },
-    { x: 0, y: -45 }
-  ];
+  function moveNoButton() {
+    const padding = 20;
 
-  noBtn.addEventListener("mouseenter", () => {
-    const move = moves[index];
-    noBtn.style.transform = `translate(${move.x}px, ${move.y}px)`;
-    index = (index + 1) % moves.length;
-  });
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-  noBtn.addEventListener("mouseleave", () => {
-    noBtn.style.transform = "translate(0, 0)";
-  });
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+  }
+
+  // Move when cursor gets near / tries to hover
+  noBtn.addEventListener("mouseenter", moveNoButton);
+  noBtn.addEventListener("mouseover", moveNoButton);
 
   yesBtn.addEventListener("click", () => {
-    document.querySelector(".buttons").style.display = "none";
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
     message.style.display = "block";
   });
+
+  // Keep it inside screen on resize
+  window.addEventListener("resize", moveNoButton);
 </script>
 
 </body>
