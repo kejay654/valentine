@@ -15,7 +15,6 @@
       justify-content: center;
       align-items: center;
       font-family: 'Poppins', sans-serif;
-      overflow: hidden;
     }
 
     #container {
@@ -31,9 +30,9 @@
     }
 
     .buttons {
-      position: relative;
       display: inline-flex;
       gap: 20px;
+      position: relative;
     }
 
     button {
@@ -42,7 +41,7 @@
       border: none;
       border-radius: 40px;
       cursor: pointer;
-      transition: transform 0.1s ease;
+      transition: transform 0.15s ease;
       white-space: nowrap;
     }
 
@@ -91,37 +90,24 @@
   const yesBtn = document.getElementById("yesBtn");
   const message = document.getElementById("message");
 
-  const sassyTexts = [
-    "nice try 😏",
-    "uh-uh 😌",
-    "not happening 😜",
-    "keep dreaming 😘"
+  const sass = ["nice try 😏", "uh-uh 😌", "nope 😜", "dream on 😘"];
+  let sassIndex = 0;
+  let moveIndex = 0;
+
+  // Fixed tiny movements — NO math, NO randomness
+  const moves = [
+    "translateX(14px)",
+    "translateX(-14px)",
+    "translateY(10px)",
+    "translateY(-10px)"
   ];
 
-  let offsetX = 0;
-  let offsetY = 0;
-  let sassyIndex = 0;
+  noBtn.addEventListener("mouseenter", () => {
+    noBtn.style.transform = moves[moveIndex];
+    noBtn.textContent = sass[sassIndex];
 
-  noBtn.addEventListener("mousemove", (e) => {
-    const rect = noBtn.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    const dx = e.clientX - centerX;
-    const dy = e.clientY - centerY;
-
-    offsetX = -dx * 0.4;
-    offsetY = -dy * 0.4;
-
-    // Clamp movement (never runs away)
-    offsetX = Math.max(-20, Math.min(20, offsetX));
-    offsetY = Math.max(-10, Math.min(10, offsetY));
-
-    noBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-
-    // Change text sassily
-    noBtn.textContent = sassyTexts[sassyIndex];
-    sassyIndex = (sassyIndex + 1) % sassyTexts.length;
+    moveIndex = (moveIndex + 1) % moves.length;
+    sassIndex = (sassIndex + 1) % sass.length;
   });
 
   noBtn.addEventListener("mouseleave", () => {
