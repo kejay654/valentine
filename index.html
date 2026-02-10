@@ -48,13 +48,14 @@ body {
     color: white;
 }
 
-/* Card */
+/* Main Card */
 .container {
     background: white;
     padding: 45px 65px;
     border-radius: 30px;
     text-align: center;
     box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+    z-index: 5;
 }
 
 h2 {
@@ -68,7 +69,6 @@ h2 {
     display: flex;
     gap: 20px;
     justify-content: center;
-    position: relative;
 }
 
 button {
@@ -83,16 +83,56 @@ button {
     background: #ff4d6d;
     color: white;
     font-weight: bold;
-    transition: transform 0.3s;
-}
-
-#yesBtn:hover {
-    transform: scale(1.15);
 }
 
 #noBtn {
     background: #ddd;
     position: relative;
+}
+
+/* End Screen */
+.end {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 20;
+}
+
+.endContent {
+    background: rgba(255,255,255,0.85);
+    padding: 35px 45px;
+    border-radius: 25px;
+    z-index: 5;
+}
+
+.end h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    color: #ff2f68;
+}
+
+/* Slideshow */
+.slideshow {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
 }
 
 /* Particles */
@@ -125,33 +165,13 @@ button {
         opacity: 0;
     }
 }
-
-/* End */
-.end {
-    position: fixed;
-    inset: 0;
-    background: rgba(255,182,193,0.97);
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    z-index: 20;
-}
-
-.end h1 {
-    font-family: 'Pacifico', cursive;
-    font-size: 3rem;
-    color: #ff2f68;
-}
 </style>
 </head>
 <body>
 
 <div class="intro" id="intro">
     <h1>Get your phone 📱<br>and start recording 🎥</h1>
-    <button onclick="alert('Okay good 😏 but don’t blink')">I’m recording</button>
-    <button onclick="startMain()">YES I’M REALLY RECORDING 😅</button>
+    <button onclick="startMain()">YES I’M RECORDING 😅</button>
 </div>
 
 <div class="container" id="main">
@@ -162,8 +182,18 @@ button {
     </div>
 </div>
 
+<!-- END SCREEN -->
 <div class="end" id="end">
-    <h1>I know you would say yes baby 💖<br>I love you</h1>
+    <div class="slideshow">
+        <img src="pic1.jpg" class="slide active">
+        <img src="pic2.jpg" class="slide">
+        <img src="pic3.jpg" class="slide">
+        <img src="pic4.jpg" class="slide">
+    </div>
+
+    <div class="endContent">
+        <h1>I knew you’d say yes 💖<br>I love you</h1>
+    </div>
 </div>
 
 <script>
@@ -187,8 +217,8 @@ noBtn.addEventListener("mouseenter", () => {
     setTimeout(()=>noBtn.innerText="No 😏",800);
 });
 
-/* 💥 Heart explosion */
-function explodeHearts(x,y,count=18){
+/* Effects */
+function explodeHearts(x,y,count=20){
     for(let i=0;i<count;i++){
         const h=document.createElement("div");
         h.className="heart";
@@ -200,8 +230,7 @@ function explodeHearts(x,y,count=18){
     }
 }
 
-/* 🎆 Fireworks */
-function fireworks(count=40){
+function fireworks(count=50){
     for(let i=0;i<count;i++){
         const c=document.createElement("div");
         c.className="confetti";
@@ -214,7 +243,7 @@ function fireworks(count=40){
 }
 
 /* Floating hearts */
-function floatHeart(){
+setInterval(()=>{
     const h=document.createElement("div");
     h.className="float-heart";
     h.innerText="❤️";
@@ -222,35 +251,36 @@ function floatHeart(){
     h.style.animationDuration=Math.random()*3+4+"s";
     document.body.appendChild(h);
     setTimeout(()=>h.remove(),7000);
-}
-setInterval(floatHeart,300);
+},300);
 
-/* 💥 NO CLICK — readable */
+/* NO CLICK */
 noBtn.addEventListener("click",(e)=>{
-    const text = caughtLines[Math.floor(Math.random()*caughtLines.length)];
-    noBtn.innerText = text;
-    noBtn.style.transform = "translate(0,0)";
-    noBtn.style.pointerEvents = "none";
+    noBtn.innerText = caughtLines[Math.floor(Math.random()*caughtLines.length)];
+    noBtn.style.pointerEvents="none";
 
-    setTimeout(() => {
-        explodeHearts(e.clientX, e.clientY, 24);
-        setTimeout(() => {
-            noBtn.style.display = "none";
-        }, 600);
-    }, 1500);
+    setTimeout(()=>{
+        explodeHearts(e.clientX,e.clientY,25);
+        setTimeout(()=>noBtn.style.display="none",600);
+    },1500);
 });
 
-/* 🎆 YES CLICK */
+/* YES CLICK */
 yesBtn.addEventListener("click",()=>{
     fireworks(60);
     explodeHearts(innerWidth/2, innerHeight/2, 30);
-    main.style.display = "none";
-    end.style.display = "flex";
-
-    setInterval(()=>{
-        explodeHearts(Math.random()*innerWidth, Math.random()*innerHeight, 10);
-    },600);
+    main.style.display="none";
+    end.style.display="flex";
 });
+
+/* Slideshow logic */
+let currentSlide = 0;
+const slides = document.querySelectorAll(".slide");
+
+setInterval(()=>{
+    slides[currentSlide].classList.remove("active");
+    currentSlide = (currentSlide + 1) % slides.length;
+    slides[currentSlide].classList.add("active");
+},3000);
 </script>
 
 </body>
