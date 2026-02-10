@@ -1,87 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Be My Valentine 💘</title>
+<meta charset="UTF-8" />
+<title>Be My Valentine 💘</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@500&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Poppins', sans-serif;
-    }
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+  }
 
-    #container {
-      text-align: center;
-    }
+  #container {
+    text-align: center;
+  }
 
-    h1 {
-      font-family: 'Pacifico', cursive;
-      color: white;
-      font-size: 3rem;
-      margin-bottom: 30px;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-    }
+  h1 {
+    font-family: 'Pacifico', cursive;
+    color: white;
+    font-size: 3rem;
+    margin-bottom: 30px;
+  }
 
-    .buttons {
-      display: inline-flex;
-      gap: 20px;
-    }
+  .buttons {
+    display: inline-flex;
+    gap: 40px;
+  }
 
-    button {
-      padding: 15px 36px;
-      font-size: 18px;
-      border: none;
-      border-radius: 40px;
-      white-space: nowrap;
-    }
+  button {
+    padding: 15px 36px;
+    font-size: 18px;
+    border: none;
+    border-radius: 40px;
+    white-space: nowrap;
+  }
 
-    #yesBtn {
-      background: #ff4d6d;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(255,77,109,0.4);
-    }
+  #yesBtn {
+    background: #ff4d6d;
+    color: white;
+    cursor: pointer;
+  }
 
-    /* Wrapper that senses the mouse */
-    #noZone {
-      position: relative;
-      width: 140px;
-      height: 70px;
-    }
+  /* BIG invisible danger zone */
+  #noZone {
+    position: relative;
+    width: 200px;
+    height: 140px;
+  }
 
-    /* The NO button itself is untouchable */
-    #noBtn {
-      background: white;
-      color: #ff4d6d;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-      position: absolute;
-      left: 0;
-      top: 0;
-      pointer-events: none;
-      transition: transform 0.1s ease;
-    }
+  /* The actual NO button */
+  #noBtn {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    color: #ff4d6d;
+    pointer-events: none; /* cursor can NEVER touch it */
+    transition: transform 0.12s ease;
+  }
 
-    #message {
-      display: none;
-      color: white;
-      font-size: 2rem;
-      margin-top: 25px;
-      animation: pop 0.5s ease;
-    }
-
-    @keyframes pop {
-      from { transform: scale(0.7); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-  </style>
+  #message {
+    display: none;
+    color: white;
+    font-size: 2rem;
+    margin-top: 25px;
+  }
+</style>
 </head>
+
 <body>
 
 <div id="container">
@@ -104,23 +97,22 @@
   const yesBtn = document.getElementById("yesBtn");
   const message = document.getElementById("message");
 
-  noZone.addEventListener("mousemove", (e) => {
-    const rect = noZone.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
+  const moves = [
+    "translate(-50%, -50%) translateX(30px)",
+    "translate(-50%, -50%) translateX(-30px)",
+    "translate(-50%, -50%) translateY(20px)",
+    "translate(-50%, -50%) translateY(-20px)"
+  ];
 
-    let moveX = -x * 0.4;
-    let moveY = -y * 0.4;
+  let i = 0;
 
-    // Clamp movement so it NEVER escapes
-    moveX = Math.max(-25, Math.min(25, moveX));
-    moveY = Math.max(-15, Math.min(15, moveY));
-
-    noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+  noZone.addEventListener("mouseenter", () => {
+    noBtn.style.transform = moves[i];
+    i = (i + 1) % moves.length;
   });
 
   noZone.addEventListener("mouseleave", () => {
-    noBtn.style.transform = "translate(0, 0)";
+    noBtn.style.transform = "translate(-50%, -50%)";
   });
 
   yesBtn.onclick = () => {
