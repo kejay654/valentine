@@ -7,137 +7,144 @@
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-    body {
-        margin: 0;
-        height: 100vh;
-        background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        font-family: 'Quicksand', sans-serif;
-    }
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Quicksand', sans-serif;
+}
 
-    .intro {
-        position: fixed;
-        inset: 0;
-        background: rgba(255, 182, 193, 0.95);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        z-index: 10;
-    }
+/* Intro */
+.intro {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,182,193,0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+}
 
-    .intro h1 {
-        font-family: 'Pacifico', cursive;
-        font-size: 3rem;
-        color: #ff2f68;
-        margin-bottom: 20px;
-    }
+.intro h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    color: #ff2f68;
+}
 
-    .intro button {
-        margin: 10px;
-        padding: 15px 30px;
-        border-radius: 30px;
-        border: none;
-        font-size: 1.2rem;
-        cursor: pointer;
-        background: #ff4d6d;
-        color: white;
-    }
+.intro button {
+    margin: 10px;
+    padding: 15px 30px;
+    border-radius: 30px;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    background: #ff4d6d;
+    color: white;
+}
 
-    .container {
-        background: white;
-        padding: 45px 65px;
-        border-radius: 30px;
-        text-align: center;
-        box-shadow: 0 25px 45px rgba(0,0,0,0.2);
-        position: relative;
-    }
+/* Main Card */
+.container {
+    background: white;
+    padding: 45px 65px;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+}
 
-    h2 {
-        font-family: 'Pacifico', cursive;
-        font-size: 3rem;
-        color: #ff4d6d;
-        margin-bottom: 35px;
-    }
+h2 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    color: #ff4d6d;
+    margin-bottom: 35px;
+}
 
-    .buttons {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
-    }
+.buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    position: relative;
+}
 
-    button {
-        padding: 15px 35px;
-        font-size: 1.3rem;
-        border-radius: 35px;
-        border: none;
-        cursor: pointer;
-    }
+button {
+    padding: 15px 35px;
+    font-size: 1.3rem;
+    border-radius: 35px;
+    border: none;
+    cursor: pointer;
+}
 
-    #yesBtn {
-        background: #ff4d6d;
-        color: white;
-        font-weight: bold;
-        transition: transform 0.3s;
-    }
+#yesBtn {
+    background: #ff4d6d;
+    color: white;
+    font-weight: bold;
+    transition: transform 0.3s;
+}
 
-    #yesBtn:hover {
-        transform: scale(1.15);
-    }
+#yesBtn:hover {
+    transform: scale(1.15);
+}
 
-    #noBtn {
-        background: #ddd;
-        position: relative;
-    }
+#noBtn {
+    background: #ddd;
+    position: relative;
+}
 
-    .heart {
-        position: fixed;
-        bottom: -20px;
-        font-size: 22px;
-        animation: floatUp linear forwards;
-        pointer-events: none;
-    }
+/* Particles */
+.heart, .confetti {
+    position: fixed;
+    pointer-events: none;
+    animation: pop 1.6s ease-out forwards;
+}
 
-    @keyframes floatUp {
-        to {
-            transform: translateY(-110vh);
-            opacity: 0;
-        }
-    }
+.confetti {
+    width: 8px;
+    height: 14px;
+}
 
-    /* End Screen */
-    .end {
-        position: fixed;
-        inset: 0;
-        background: rgba(255, 182, 193, 0.97);
-        display: none;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        z-index: 20;
-    }
+@keyframes pop {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(1.6) translateY(-80px); opacity: 0; }
+}
 
-    .end h1 {
-        font-family: 'Pacifico', cursive;
-        font-size: 3rem;
-        color: #ff2f68;
-        margin-bottom: 25px;
-    }
+/* Floating hearts */
+.float-heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 22px;
+    animation: floatUp linear forwards;
+}
 
-    .end button {
-        padding: 15px 40px;
-        font-size: 1.3rem;
-        border-radius: 35px;
-        border: none;
-        background: #ff4d6d;
-        color: white;
-        cursor: pointer;
+@keyframes floatUp {
+    to {
+        transform: translateY(-110vh);
+        opacity: 0;
     }
+}
+
+/* End Screen */
+.end {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,182,193,0.97);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 20;
+}
+
+.end h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    color: #ff2f68;
+}
 </style>
 </head>
 <body>
@@ -158,64 +165,84 @@
 
 <div class="end" id="end">
     <h1>I know you would say yes baby 💖<br>I love you</h1>
-    <button onclick="sendKiss()">Send me a kiss 😘</button>
 </div>
 
 <script>
-    const noBtn = document.getElementById("noBtn");
-    const intro = document.getElementById("intro");
-    const main = document.getElementById("main");
-    const end = document.getElementById("end");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const intro = document.getElementById("intro");
+const main = document.getElementById("main");
+const end = document.getElementById("end");
 
-    const sassLines = [
-        "Nice try 😌",
-        "Almost 😏",
-        "You thought 😂",
-        "Not today 💅",
-        "Too slow 😜"
-    ];
+const sassLines = ["Nice try 😌","Almost 😏","You thought 😂","Too slow 😜"];
+const caughtLines = ["WAIT— 😳","HEY— 😭","Nice reflexes 😅","Okay okay you win 😂"];
 
-    function startMain() {
-        intro.style.display = "none";
+function startMain() {
+    intro.style.display = "none";
+}
+
+/* No button dodge */
+noBtn.addEventListener("mouseenter", () => {
+    noBtn.innerText = sassLines[Math.floor(Math.random()*sassLines.length)];
+    noBtn.style.transform = `translate(${Math.random()*200-100}px, ${Math.random()*120-60}px)`;
+    setTimeout(()=>noBtn.innerText="No 😏",800);
+});
+
+/* 💥 Heart Explosion */
+function explodeHearts(x,y,count=18){
+    for(let i=0;i<count;i++){
+        const h=document.createElement("div");
+        h.className="heart";
+        h.innerText="❤️";
+        h.style.left=x+"px";
+        h.style.top=y+"px";
+        document.body.appendChild(h);
+        setTimeout(()=>h.remove(),1600);
     }
+}
 
-    noBtn.addEventListener("mouseenter", () => {
-        const randomLine = sassLines[Math.floor(Math.random() * sassLines.length)];
-        noBtn.innerText = randomLine;
-
-        const x = Math.random() * 200 - 100;
-        const y = Math.random() * 120 - 60;
-        noBtn.style.transform = `translate(${x}px, ${y}px)`;
-
-        setTimeout(() => {
-            noBtn.innerText = "No 😏";
-        }, 900);
-    });
-
-    function createHeart(amount = 1) {
-        for (let i = 0; i < amount; i++) {
-            const heart = document.createElement("div");
-            heart.className = "heart";
-            heart.innerText = "❤️";
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.animationDuration = Math.random() * 3 + 4 + "s";
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 7000);
-        }
+/* 🎆 Fireworks + Confetti */
+function fireworks(count=40){
+    for(let i=0;i<count;i++){
+        const c=document.createElement("div");
+        c.className="confetti";
+        c.style.left=Math.random()*innerWidth+"px";
+        c.style.top=Math.random()*innerHeight+"px";
+        c.style.background=`hsl(${Math.random()*360},100%,60%)`;
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),1600);
     }
+}
 
-    setInterval(() => createHeart(1), 300);
+/* Floating hearts always */
+function floatHeart(){
+    const h=document.createElement("div");
+    h.className="float-heart";
+    h.innerText="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.animationDuration=Math.random()*3+4+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),7000);
+}
+setInterval(floatHeart,300);
 
-    document.getElementById("yesBtn").addEventListener("click", () => {
-        createHeart(50);
-        main.style.display = "none";
-        end.style.display = "flex";
-    });
+/* 💥 NO CLICK */
+noBtn.addEventListener("click",(e)=>{
+    noBtn.innerText=caughtLines[Math.floor(Math.random()*caughtLines.length)];
+    explodeHearts(e.clientX,e.clientY,22);
+    noBtn.style.pointerEvents="none";
+    setTimeout(()=>noBtn.style.display="none",300);
+});
 
-    function sendKiss() {
-        createHeart(40);
-        alert("Kiss received 😘💖");
-    }
+/* 🎆 YES CLICK */
+yesBtn.addEventListener("click",()=>{
+    fireworks(60);
+    explodeHearts(innerWidth/2,innerHeight/2,30);
+    main.style.display="none";
+    end.style.display="flex";
+
+    setInterval(()=>explodeHearts(Math.random()*innerWidth,Math.random()*innerHeight,10),600);
+});
 </script>
 
 </body>
