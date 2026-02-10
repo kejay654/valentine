@@ -4,38 +4,36 @@
   <meta charset="UTF-8" />
   <title>Be My Valentine 💘</title>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:wght@600&family=Poppins:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@500&display=swap" rel="stylesheet">
 
   <style>
     body {
       margin: 0;
       height: 100vh;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      font-family: 'Poppins', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
+      font-family: 'Poppins', sans-serif;
       overflow: hidden;
-      text-align: center;
     }
 
     #container {
-      z-index: 2;
+      text-align: center;
     }
 
     h1 {
       font-family: 'Pacifico', cursive;
-      color: #fff;
-      font-size: 3.2rem;
+      color: white;
+      font-size: 3rem;
       margin-bottom: 30px;
-      text-shadow: 3px 3px 10px rgba(0,0,0,0.25);
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
     }
 
-    /* Button row */
     .buttons {
       position: relative;
-      height: 90px;
+      display: inline-flex;
+      gap: 20px;
     }
 
     button {
@@ -44,19 +42,14 @@
       border: none;
       border-radius: 40px;
       cursor: pointer;
-      font-family: 'Poppins', sans-serif;
-      transition: transform 0.15s ease;
+      transition: transform 0.1s ease;
+      white-space: nowrap;
     }
 
     #yesBtn {
       background: #ff4d6d;
       color: white;
-      box-shadow: 0 8px 20px rgba(255,77,109,0.4);
-      margin-right: 20px;
-    }
-
-    #yesBtn:hover {
-      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(255,77,109,0.4);
     }
 
     #noBtn {
@@ -68,188 +61,78 @@
 
     #message {
       display: none;
-      font-size: 2.4rem;
       color: white;
-      font-family: 'Playfair Display', serif;
-      margin-top: 20px;
-      animation: pop 0.6s ease;
+      font-size: 2rem;
+      margin-top: 25px;
+      animation: pop 0.5s ease;
     }
 
     @keyframes pop {
-      from { transform: scale(0.6); opacity: 0; }
+      from { transform: scale(0.7); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
-    }
-
-    /* Handwriting */
-    #signature {
-      width: 320px;
-      margin: 20px auto;
-      display: none;
-    }
-
-    #signature path {
-      fill: none;
-      stroke: white;
-      stroke-width: 4;
-      stroke-linecap: round;
-      stroke-dasharray: 1000;
-      stroke-dashoffset: 1000;
-      animation: draw 3s ease forwards;
-    }
-
-    @keyframes draw {
-      to { stroke-dashoffset: 0; }
-    }
-
-    /* Kiss */
-    #kissBtn {
-      display: none;
-      background: white;
-      color: #ff4d6d;
-      margin-top: 20px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    }
-
-    #kiss {
-      display: none;
-      font-size: 4rem;
-      animation: kissPop 0.8s ease infinite alternate;
-    }
-
-    @keyframes kissPop {
-      from { transform: scale(1); }
-      to { transform: scale(1.2); }
-    }
-
-    /* Hearts */
-    .heart {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: red;
-      transform: rotate(45deg);
-      animation: float 10s linear infinite;
-      opacity: 0.6;
-    }
-
-    .heart::before,
-    .heart::after {
-      content: '';
-      width: 20px;
-      height: 20px;
-      background: red;
-      border-radius: 50%;
-      position: absolute;
-    }
-
-    .heart::before { top: -10px; left: 0; }
-    .heart::after { left: -10px; top: 0; }
-
-    @keyframes float {
-      from { transform: translateY(100vh) rotate(45deg); }
-      to { transform: translateY(-10vh) rotate(45deg); }
-    }
-
-    /* Confetti */
-    .confetti {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      top: -10px;
-      animation: confetti-fall 3s linear forwards;
-      z-index: 5;
-    }
-
-    @keyframes confetti-fall {
-      to {
-        transform: translateY(110vh) rotate(720deg);
-        opacity: 0;
-      }
     }
   </style>
 </head>
 <body>
 
-<audio id="bgMusic" loop>
-  <source src="love.mp3" type="audio/mpeg">
-</audio>
-
 <div id="container">
-  <h1>Will you be my Valentine, Babyyy? 💘</h1>
+  <h1>Will you be my Valentine? 💘</h1>
 
   <div class="buttons">
     <button id="yesBtn">Yes 💕</button>
     <button id="noBtn">No 💔</button>
   </div>
 
-  <div id="message">
-    I knew you would say YES 😘<br>
-    I LOVE YOU, Babyyy ❤️
-  </div>
-
-  <svg id="signature" viewBox="0 0 400 120">
-    <path d="M20 80 Q40 20 80 80 T160 80 Q180 40 200 80 T260 80 Q280 40 320 80" />
-  </svg>
-
-  <button id="kissBtn">Send me a kiss 😘</button>
-  <div id="kiss">💋</div>
+  <div id="message">I knew you’d say YES 😘❤️</div>
 </div>
 
 <script>
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
   const message = document.getElementById("message");
-  const music = document.getElementById("bgMusic");
-  const signature = document.getElementById("signature");
-  const kissBtn = document.getElementById("kissBtn");
-  const kiss = document.getElementById("kiss");
 
-  // VERY SUBTLE wiggle (stays near text)
-  noBtn.addEventListener("mouseenter", () => {
-    const x = (Math.random() * 20) - 10;
-    const y = (Math.random() * 10) - 5;
-    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+  const sassyTexts = [
+    "nice try 😏",
+    "uh-uh 😌",
+    "not happening 😜",
+    "keep dreaming 😘"
+  ];
+
+  let offsetX = 0;
+  let offsetY = 0;
+  let sassyIndex = 0;
+
+  noBtn.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const dx = e.clientX - centerX;
+    const dy = e.clientY - centerY;
+
+    offsetX = -dx * 0.4;
+    offsetY = -dy * 0.4;
+
+    // Clamp movement (never runs away)
+    offsetX = Math.max(-20, Math.min(20, offsetX));
+    offsetY = Math.max(-10, Math.min(10, offsetY));
+
+    noBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+
+    // Change text sassily
+    noBtn.textContent = sassyTexts[sassyIndex];
+    sassyIndex = (sassyIndex + 1) % sassyTexts.length;
   });
 
   noBtn.addEventListener("mouseleave", () => {
     noBtn.style.transform = "translate(0, 0)";
+    noBtn.textContent = "No 💔";
   });
 
   yesBtn.onclick = () => {
-    yesBtn.style.display = "none";
-    noBtn.style.display = "none";
+    document.querySelector(".buttons").style.display = "none";
     message.style.display = "block";
-    signature.style.display = "block";
-    kissBtn.style.display = "inline-block";
-    music.play();
-    launchConfetti();
   };
-
-  kissBtn.onclick = () => {
-    kiss.style.display = "block";
-  };
-
-  // Hearts
-  for (let i = 0; i < 25; i++) {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = (6 + Math.random() * 6) + "s";
-    heart.style.opacity = Math.random();
-    document.body.appendChild(heart);
-  }
-
-  function launchConfetti() {
-    const colors = ["#ff4d6d", "#ffd166", "#4cc9f0", "#ffffff"];
-    for (let i = 0; i < 120; i++) {
-      const c = document.createElement("div");
-      c.className = "confetti";
-      c.style.left = Math.random() * 100 + "vw";
-      c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      document.body.appendChild(c);
-      setTimeout(() => c.remove(), 4000);
-    }
-  }
 </script>
 
 </body>
