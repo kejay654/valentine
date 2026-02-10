@@ -48,7 +48,7 @@ body {
     color: white;
 }
 
-/* Main Card */
+/* Card */
 .container {
     background: white;
     padding: 45px 65px;
@@ -112,7 +112,6 @@ button {
     100% { transform: scale(1.6) translateY(-80px); opacity: 0; }
 }
 
-/* Floating hearts */
 .float-heart {
     position: fixed;
     bottom: -20px;
@@ -127,7 +126,7 @@ button {
     }
 }
 
-/* End Screen */
+/* End */
 .end {
     position: fixed;
     inset: 0;
@@ -181,14 +180,14 @@ function startMain() {
     intro.style.display = "none";
 }
 
-/* No button dodge */
+/* No dodge */
 noBtn.addEventListener("mouseenter", () => {
     noBtn.innerText = sassLines[Math.floor(Math.random()*sassLines.length)];
     noBtn.style.transform = `translate(${Math.random()*200-100}px, ${Math.random()*120-60}px)`;
     setTimeout(()=>noBtn.innerText="No 😏",800);
 });
 
-/* 💥 Heart Explosion */
+/* 💥 Heart explosion */
 function explodeHearts(x,y,count=18){
     for(let i=0;i<count;i++){
         const h=document.createElement("div");
@@ -201,7 +200,7 @@ function explodeHearts(x,y,count=18){
     }
 }
 
-/* 🎆 Fireworks + Confetti */
+/* 🎆 Fireworks */
 function fireworks(count=40){
     for(let i=0;i<count;i++){
         const c=document.createElement("div");
@@ -214,7 +213,7 @@ function fireworks(count=40){
     }
 }
 
-/* Floating hearts always */
+/* Floating hearts */
 function floatHeart(){
     const h=document.createElement("div");
     h.className="float-heart";
@@ -226,22 +225,31 @@ function floatHeart(){
 }
 setInterval(floatHeart,300);
 
-/* 💥 NO CLICK */
+/* 💥 NO CLICK — readable */
 noBtn.addEventListener("click",(e)=>{
-    noBtn.innerText=caughtLines[Math.floor(Math.random()*caughtLines.length)];
-    explodeHearts(e.clientX,e.clientY,22);
-    noBtn.style.pointerEvents="none";
-    setTimeout(()=>noBtn.style.display="none",300);
+    const text = caughtLines[Math.floor(Math.random()*caughtLines.length)];
+    noBtn.innerText = text;
+    noBtn.style.transform = "translate(0,0)";
+    noBtn.style.pointerEvents = "none";
+
+    setTimeout(() => {
+        explodeHearts(e.clientX, e.clientY, 24);
+        setTimeout(() => {
+            noBtn.style.display = "none";
+        }, 600);
+    }, 1500);
 });
 
 /* 🎆 YES CLICK */
 yesBtn.addEventListener("click",()=>{
     fireworks(60);
-    explodeHearts(innerWidth/2,innerHeight/2,30);
-    main.style.display="none";
-    end.style.display="flex";
+    explodeHearts(innerWidth/2, innerHeight/2, 30);
+    main.style.display = "none";
+    end.style.display = "flex";
 
-    setInterval(()=>explodeHearts(Math.random()*innerWidth,Math.random()*innerHeight,10),600);
+    setInterval(()=>{
+        explodeHearts(Math.random()*innerWidth, Math.random()*innerHeight, 10);
+    },600);
 });
 </script>
 
