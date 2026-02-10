@@ -23,14 +23,12 @@
     text-align: center;
   }
 
-  #question {
+  h1 {
     font-family: 'Pacifico', cursive;
     font-size: 3rem;
     color: white;
+    margin-bottom: 40px;
     text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-    position: relative;
-    display: inline-block;
-    padding: 20px 40px;
   }
 
   button {
@@ -39,24 +37,20 @@
     border: none;
     border-radius: 40px;
     cursor: pointer;
-    position: relative;
   }
 
   #yesBtn {
     background: #ff4d6d;
     color: white;
     box-shadow: 0 6px 20px rgba(255,77,109,0.4);
-    margin-top: 30px;
+    margin-right: 20px;
   }
 
   #noBtn {
-    position: absolute;
     background: white;
     color: #ff4d6d;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
-    pointer-events: none; /* 👈 cursor can NEVER land */
-    transition: transform 0.05s linear;
-    white-space: nowrap;
+    position: absolute;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
   }
 
   #message {
@@ -64,7 +58,7 @@
     margin-top: 30px;
     font-size: 2rem;
     color: white;
-    animation: pop 0.6s ease;
+    animation: pop 0.5s ease;
   }
 
   @keyframes pop {
@@ -77,12 +71,10 @@
 <body>
 
 <div id="container">
-  <div id="question">Will you be my Valentine? 💘</div>
+  <h1>Will you be my Valentine? 💘</h1>
 
-  <button id="noBtn">No 😏</button>
-
-  <br>
   <button id="yesBtn">Yes 💕</button>
+  <button id="noBtn">No 💔</button>
 
   <div id="message">I knew you’d say YES 😘❤️</div>
 </div>
@@ -90,63 +82,38 @@
 <script>
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
-  const question = document.getElementById("question");
   const message = document.getElementById("message");
+  const container = document.getElementById("container");
 
-  const taunts = [
-    "nice try 😏",
-    "almost 😜",
-    "not today 😈",
-    "hehe nope 💃",
-    "keep chasing 😘"
-  ];
+  // Initial position near YES
+  let posX = 160;
+  let posY = 0;
 
-  let angle = 0;
-  let bounce = 0;
+  noBtn.style.left = posX + "px";
+  noBtn.style.top = posY + "px";
 
-  function orbit() {
-    const rect = question.getBoundingClientRect();
+  noBtn.addEventListener("mouseenter", () => {
+    const moveX = (Math.random() * 60) - 30;
+    const moveY = (Math.random() * 40) - 20;
 
-    const radiusX = rect.width / 2 + 40;
-    const radiusY = rect.height / 2 + 25;
+    posX += moveX;
+    posY += moveY;
 
-    angle += 0.035;
-    bounce += 0.15;
+    const cRect = container.getBoundingClientRect();
 
-    const x = rect.left + rect.width / 2
-            + Math.cos(angle) * radiusX
-            - noBtn.offsetWidth / 2;
+    // Keep inside container
+    posX = Math.max(0, Math.min(posX, cRect.width - noBtn.offsetWidth));
+    posY = Math.max(0, Math.min(posY, cRect.height - noBtn.offsetHeight));
 
-    const y = rect.top + rect.height / 2
-            + Math.sin(angle) * radiusY
-            + Math.sin(bounce) * 6
-            - noBtn.offsetHeight / 2;
-
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-
-    requestAnimationFrame(orbit);
-  }
-
-  // Change taunt when cursor gets close
-  document.addEventListener("mousemove", (e) => {
-    const rect = noBtn.getBoundingClientRect();
-    const dx = rect.left + rect.width / 2 - e.clientX;
-    const dy = rect.top + rect.height / 2 - e.clientY;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-
-    if (dist < 140) {
-      noBtn.textContent = taunts[Math.floor(Math.random() * taunts.length)];
-    }
+    noBtn.style.left = posX + "px";
+    noBtn.style.top = posY + "px";
   });
 
   yesBtn.addEventListener("click", () => {
-    noBtn.style.display = "none";
     yesBtn.style.display = "none";
+    noBtn.style.display = "none";
     message.style.display = "block";
   });
-
-  orbit();
 </script>
 
 </body>
