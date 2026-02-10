@@ -1,82 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Be My Valentine 💘</title>
+<meta charset="UTF-8">
+<title>Be My Valentine 💘</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@500&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Poppins', sans-serif;
-      overflow: hidden;
-    }
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+  }
 
-    #container {
-      position: relative;
-      text-align: center;
-    }
+  #container {
+    position: relative;
+    text-align: center;
+  }
 
-    h1 {
-      font-family: 'Pacifico', cursive;
-      font-size: 3rem;
-      color: white;
-      margin-bottom: 60px;
-      text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-      position: relative;
-      display: inline-block;
-    }
+  #question {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    color: white;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    position: relative;
+    display: inline-block;
+    padding: 20px 40px;
+  }
 
-    button {
-      padding: 14px 34px;
-      font-size: 18px;
-      border: none;
-      border-radius: 40px;
-      cursor: pointer;
-    }
+  button {
+    padding: 14px 34px;
+    font-size: 18px;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    position: relative;
+  }
 
-    #yesBtn {
-      background: #ff4d6d;
-      color: white;
-      box-shadow: 0 6px 20px rgba(255,77,109,0.4);
-      margin-right: 20px;
-    }
+  #yesBtn {
+    background: #ff4d6d;
+    color: white;
+    box-shadow: 0 6px 20px rgba(255,77,109,0.4);
+    margin-top: 30px;
+  }
 
-    #noBtn {
-      background: white;
-      color: #ff4d6d;
-      position: absolute;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-      transition: transform 0.08s linear;
-    }
+  #noBtn {
+    position: absolute;
+    background: white;
+    color: #ff4d6d;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    pointer-events: none; /* 👈 cursor can NEVER land */
+    transition: transform 0.05s linear;
+    white-space: nowrap;
+  }
 
-    #message {
-      display: none;
-      margin-top: 30px;
-      font-size: 2rem;
-      color: white;
-      animation: pop 0.5s ease;
-    }
+  #message {
+    display: none;
+    margin-top: 30px;
+    font-size: 2rem;
+    color: white;
+    animation: pop 0.6s ease;
+  }
 
-    @keyframes pop {
-      from { transform: scale(0.6); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-  </style>
+  @keyframes pop {
+    from { transform: scale(0.6); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+</style>
 </head>
+
 <body>
 
 <div id="container">
-  <h1 id="question">Will you be my Valentine? 💘</h1>
+  <div id="question">Will you be my Valentine? 💘</div>
 
-  <button id="yesBtn">Yes 💕</button>
   <button id="noBtn">No 😏</button>
+
+  <br>
+  <button id="yesBtn">Yes 💕</button>
 
   <div id="message">I knew you’d say YES 😘❤️</div>
 </div>
@@ -84,52 +90,63 @@
 <script>
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
-  const message = document.getElementById("message");
   const question = document.getElementById("question");
+  const message = document.getElementById("message");
 
-  // Start near the text
-  let posX = 20;
-  let posY = 10;
+  const taunts = [
+    "nice try 😏",
+    "almost 😜",
+    "not today 😈",
+    "hehe nope 💃",
+    "keep chasing 😘"
+  ];
 
-  noBtn.style.transform = `translate(${posX}px, ${posY}px)`;
+  let angle = 0;
+  let bounce = 0;
 
+  function orbit() {
+    const rect = question.getBoundingClientRect();
+
+    const radiusX = rect.width / 2 + 40;
+    const radiusY = rect.height / 2 + 25;
+
+    angle += 0.035;
+    bounce += 0.15;
+
+    const x = rect.left + rect.width / 2
+            + Math.cos(angle) * radiusX
+            - noBtn.offsetWidth / 2;
+
+    const y = rect.top + rect.height / 2
+            + Math.sin(angle) * radiusY
+            + Math.sin(bounce) * 6
+            - noBtn.offsetHeight / 2;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    requestAnimationFrame(orbit);
+  }
+
+  // Change taunt when cursor gets close
   document.addEventListener("mousemove", (e) => {
-    const btnRect = noBtn.getBoundingClientRect();
-    const textRect = question.getBoundingClientRect();
+    const rect = noBtn.getBoundingClientRect();
+    const dx = rect.left + rect.width / 2 - e.clientX;
+    const dy = rect.top + rect.height / 2 - e.clientY;
+    const dist = Math.sqrt(dx*dx + dy*dy);
 
-    const btnCenterX = btnRect.left + btnRect.width / 2;
-    const btnCenterY = btnRect.top + btnRect.height / 2;
-
-    const dx = btnCenterX - e.clientX;
-    const dy = btnCenterY - e.clientY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    const repelDistance = 110;
-
-    if (distance < repelDistance) {
-      const angle = Math.atan2(dy, dx);
-
-      posX += Math.cos(angle) * 25;
-      posY += Math.sin(angle) * 25;
-
-      // Constrain movement INSIDE the text area
-      const minX = textRect.left - question.offsetLeft - 20;
-      const maxX = textRect.width - noBtn.offsetWidth + 20;
-      const minY = -question.offsetHeight / 2;
-      const maxY = question.offsetHeight / 2;
-
-      posX = Math.max(minX, Math.min(posX, maxX));
-      posY = Math.max(minY, Math.min(posY, maxY));
-
-      noBtn.style.transform = `translate(${posX}px, ${posY}px)`;
+    if (dist < 140) {
+      noBtn.textContent = taunts[Math.floor(Math.random() * taunts.length)];
     }
   });
 
   yesBtn.addEventListener("click", () => {
-    yesBtn.style.display = "none";
     noBtn.style.display = "none";
+    yesBtn.style.display = "none";
     message.style.display = "block";
   });
+
+  orbit();
 </script>
 
 </body>
