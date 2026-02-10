@@ -32,7 +32,6 @@
     .buttons {
       display: inline-flex;
       gap: 20px;
-      position: relative;
     }
 
     button {
@@ -41,7 +40,6 @@
       border: none;
       border-radius: 40px;
       cursor: pointer;
-      transition: transform 0.15s ease;
       white-space: nowrap;
     }
 
@@ -51,11 +49,34 @@
       box-shadow: 0 6px 20px rgba(255,77,109,0.4);
     }
 
+    /* 🚫 NO button is untouchable */
     #noBtn {
       background: white;
       color: #ff4d6d;
       box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      pointer-events: none;
+    }
+
+    /* Fake sass label */
+    #noWrapper {
       position: relative;
+      display: inline-block;
+    }
+
+    #sass {
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    #noWrapper:hover #sass {
+      opacity: 1;
     }
 
     #message {
@@ -79,41 +100,19 @@
 
   <div class="buttons">
     <button id="yesBtn">Yes 💕</button>
-    <button id="noBtn">No 💔</button>
+
+    <div id="noWrapper">
+      <div id="sass">nice try 😏</div>
+      <button id="noBtn">No 💔</button>
+    </div>
   </div>
 
   <div id="message">I knew you’d say YES 😘❤️</div>
 </div>
 
 <script>
-  const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
   const message = document.getElementById("message");
-
-  const sass = ["nice try 😏", "uh-uh 😌", "nope 😜", "dream on 😘"];
-  let sassIndex = 0;
-  let moveIndex = 0;
-
-  // Fixed tiny movements — NO math, NO randomness
-  const moves = [
-    "translateX(14px)",
-    "translateX(-14px)",
-    "translateY(10px)",
-    "translateY(-10px)"
-  ];
-
-  noBtn.addEventListener("mouseenter", () => {
-    noBtn.style.transform = moves[moveIndex];
-    noBtn.textContent = sass[sassIndex];
-
-    moveIndex = (moveIndex + 1) % moves.length;
-    sassIndex = (sassIndex + 1) % sass.length;
-  });
-
-  noBtn.addEventListener("mouseleave", () => {
-    noBtn.style.transform = "translate(0, 0)";
-    noBtn.textContent = "No 💔";
-  });
 
   yesBtn.onclick = () => {
     document.querySelector(".buttons").style.display = "none";
