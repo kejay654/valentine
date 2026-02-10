@@ -50,14 +50,17 @@
       box-shadow: 0 8px 20px rgba(255,77,109,0.4);
     }
 
-    #yesBtn:hover { transform: scale(1.08); }
+    #yesBtn:hover {
+      transform: scale(1.08);
+    }
 
     #noBtn {
-      background: #fff;
+      background: #ffffff;
       color: #ff4d6d;
       position: absolute;
       left: 50%;
-      transform: translateX(-50%);
+      top: 55%;
+      transform: translate(-50%, 0);
       box-shadow: 0 6px 15px rgba(0,0,0,0.15);
     }
 
@@ -82,7 +85,7 @@
       display: none;
     }
 
-    path {
+    #signature path {
       fill: none;
       stroke: white;
       stroke-width: 4;
@@ -116,7 +119,7 @@
       to { transform: scale(1.2); }
     }
 
-    /* Hearts */
+    /* Floating hearts */
     .heart {
       position: absolute;
       width: 20px;
@@ -176,7 +179,8 @@
   <button id="noBtn">No 💔</button>
 
   <div id="message">
-    I knew you would say YES 😘<br>I LOVE YOU
+    I knew you would say YES 😘<br>
+    I LOVE YOU, Babyyy ❤️
   </div>
 
   <!-- Handwritten Name -->
@@ -197,17 +201,22 @@
   const kissBtn = document.getElementById("kissBtn");
   const kiss = document.getElementById("kiss");
 
-  document.addEventListener("mousemove", e => {
+  // SUBTLE, SAFE NO BUTTON MOVEMENT
+  document.addEventListener("mousemove", (e) => {
     const rect = noBtn.getBoundingClientRect();
-    const dx = rect.left + rect.width/2 - e.clientX;
-    const dy = rect.top + rect.height/2 - e.clientY;
-    if (Math.hypot(dx, dy) < 120) {
-      let x = rect.left + dx * 0.15;
-      let y = rect.top + dy * 0.15;
-      x = Math.max(20, Math.min(window.innerWidth - rect.width - 20, x));
-      y = Math.max(20, Math.min(window.innerHeight - rect.height - 20, y));
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+    const distance = Math.hypot(dx, dy);
+
+    if (distance < 90) {
+      const offsetX = -(dx / distance) * 12;
+      const offsetY = -(dy / distance) * 12;
+      noBtn.style.transform = `translate(-50%, 0) translate(${offsetX}px, ${offsetY}px)`;
+    } else {
+      noBtn.style.transform = "translate(-50%, 0)";
     }
   });
 
@@ -225,6 +234,7 @@
     kiss.style.display = "block";
   };
 
+  // Floating hearts
   for (let i = 0; i < 25; i++) {
     const heart = document.createElement("div");
     heart.className = "heart";
@@ -235,12 +245,12 @@
   }
 
   function launchConfetti() {
-    const colors = ["#ff4d6d","#ffd166","#4cc9f0","#fff"];
+    const colors = ["#ff4d6d", "#ffd166", "#4cc9f0", "#ffffff"];
     for (let i = 0; i < 120; i++) {
       const c = document.createElement("div");
       c.className = "confetti";
       c.style.left = Math.random() * 100 + "vw";
-      c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+      c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
       document.body.appendChild(c);
       setTimeout(() => c.remove(), 4000);
     }
