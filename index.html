@@ -18,10 +18,10 @@
         font-family: 'Quicksand', sans-serif;
     }
 
-    .intro, .end {
+    .intro {
         position: fixed;
         inset: 0;
-        background: rgba(255, 182, 193, 0.97);
+        background: rgba(255, 182, 193, 0.95);
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -30,23 +30,22 @@
         z-index: 10;
     }
 
-    .end { display: none; z-index: 20; }
-
-    .intro h1, .end h1 {
+    .intro h1 {
         font-family: 'Pacifico', cursive;
         font-size: 3rem;
         color: #ff2f68;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
     }
 
-    .intro button, .end button {
-        padding: 15px 40px;
-        font-size: 1.3rem;
-        border-radius: 35px;
+    .intro button {
+        margin: 10px;
+        padding: 15px 30px;
+        border-radius: 30px;
         border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
         background: #ff4d6d;
         color: white;
-        cursor: pointer;
     }
 
     .container {
@@ -56,7 +55,6 @@
         text-align: center;
         box-shadow: 0 25px 45px rgba(0,0,0,0.2);
         position: relative;
-        width: 420px;
     }
 
     h2 {
@@ -67,8 +65,9 @@
     }
 
     .buttons {
-        position: relative;
-        height: 80px;
+        display: flex;
+        gap: 20px;
+        justify-content: center;
     }
 
     button {
@@ -77,35 +76,67 @@
         border-radius: 35px;
         border: none;
         cursor: pointer;
-        position: absolute;
     }
 
     #yesBtn {
         background: #ff4d6d;
         color: white;
-        left: 60px;
+        font-weight: bold;
+        transition: transform 0.3s;
+    }
+
+    #yesBtn:hover {
+        transform: scale(1.15);
     }
 
     #noBtn {
         background: #ddd;
-        right: 60px;
+        position: relative;
     }
 
-    .heart, .confetti {
+    .heart {
         position: fixed;
+        bottom: -20px;
+        font-size: 22px;
+        animation: floatUp linear forwards;
         pointer-events: none;
-        animation: pop 1.5s ease-out forwards;
     }
 
-    .confetti {
-        width: 8px;
-        height: 14px;
-        background: red;
+    @keyframes floatUp {
+        to {
+            transform: translateY(-110vh);
+            opacity: 0;
+        }
     }
 
-    @keyframes pop {
-        0% { transform: scale(0); opacity: 1; }
-        100% { transform: scale(1.4); opacity: 0; }
+    /* End Screen */
+    .end {
+        position: fixed;
+        inset: 0;
+        background: rgba(255, 182, 193, 0.97);
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        z-index: 20;
+    }
+
+    .end h1 {
+        font-family: 'Pacifico', cursive;
+        font-size: 3rem;
+        color: #ff2f68;
+        margin-bottom: 25px;
+    }
+
+    .end button {
+        padding: 15px 40px;
+        font-size: 1.3rem;
+        border-radius: 35px;
+        border: none;
+        background: #ff4d6d;
+        color: white;
+        cursor: pointer;
     }
 </style>
 </head>
@@ -113,12 +144,13 @@
 
 <div class="intro" id="intro">
     <h1>Get your phone 📱<br>and start recording 🎥</h1>
-    <button onclick="startMain()">YES I’M RECORDING 😅</button>
+    <button onclick="alert('Okay good 😏 but don’t blink')">I’m recording</button>
+    <button onclick="startMain()">YES I’M REALLY RECORDING 😅</button>
 </div>
 
 <div class="container" id="main">
     <h2>Babyyy 💕<br>Will you be my Valentine?</h2>
-    <div class="buttons" id="btnArea">
+    <div class="buttons">
         <button id="yesBtn">Yes 💖</button>
         <button id="noBtn">No 😏</button>
     </div>
@@ -131,71 +163,57 @@
 
 <script>
     const noBtn = document.getElementById("noBtn");
-    const btnArea = document.getElementById("btnArea");
     const intro = document.getElementById("intro");
     const main = document.getElementById("main");
     const end = document.getElementById("end");
 
-    const sass = ["Nice try 😌","Too slow 😜","You thought 😂","Nope 💅"];
+    const sassLines = [
+        "Nice try 😌",
+        "Almost 😏",
+        "You thought 😂",
+        "Not today 💅",
+        "Too slow 😜"
+    ];
 
     function startMain() {
         intro.style.display = "none";
     }
 
-    function moveNo() {
-        const area = btnArea.getBoundingClientRect();
-        const maxX = area.width - noBtn.offsetWidth;
-        const maxY = area.height - noBtn.offsetHeight;
+    noBtn.addEventListener("mouseenter", () => {
+        const randomLine = sassLines[Math.floor(Math.random() * sassLines.length)];
+        noBtn.innerText = randomLine;
 
-        noBtn.innerText = sass[Math.floor(Math.random()*sass.length)];
-        noBtn.style.left = Math.random() * maxX + "px";
-        noBtn.style.top = Math.random() * maxY + "px";
+        const x = Math.random() * 200 - 100;
+        const y = Math.random() * 120 - 60;
+        noBtn.style.transform = `translate(${x}px, ${y}px)`;
 
-        setTimeout(() => noBtn.innerText = "No 😏", 700);
-    }
+        setTimeout(() => {
+            noBtn.innerText = "No 😏";
+        }, 900);
+    });
 
-    noBtn.addEventListener("mouseenter", moveNo);
-    noBtn.addEventListener("mousemove", moveNo);
-
-    function heart(x,y) {
-        const h = document.createElement("div");
-        h.className = "heart";
-        h.innerText = "❤️";
-        h.style.left = x+"px";
-        h.style.top = y+"px";
-        document.body.appendChild(h);
-        setTimeout(()=>h.remove(),1500);
-    }
-
-    function confetti(x,y) {
-        const c = document.createElement("div");
-        c.className = "confetti";
-        c.style.left = x+"px";
-        c.style.top = y+"px";
-        c.style.background = `hsl(${Math.random()*360},100%,60%)`;
-        document.body.appendChild(c);
-        setTimeout(()=>c.remove(),1500);
-    }
-
-    document.getElementById("yesBtn").onclick = () => {
-        for(let i=0;i<40;i++){
-            heart(Math.random()*innerWidth,Math.random()*innerHeight);
-            confetti(Math.random()*innerWidth,Math.random()*innerHeight);
+    function createHeart(amount = 1) {
+        for (let i = 0; i < amount; i++) {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerText = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 3 + 4 + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 7000);
         }
-        main.style.display="none";
-        end.style.display="flex";
+    }
 
-        setInterval(()=>{
-            for(let i=0;i<15;i++){
-                heart(Math.random()*innerWidth,Math.random()*innerHeight);
-            }
-        },400);
-    };
+    setInterval(() => createHeart(1), 300);
 
-    function sendKiss(){
-        for(let i=0;i<30;i++){
-            heart(innerWidth/2,innerHeight/2);
-        }
+    document.getElementById("yesBtn").addEventListener("click", () => {
+        createHeart(50);
+        main.style.display = "none";
+        end.style.display = "flex";
+    });
+
+    function sendKiss() {
+        createHeart(40);
         alert("Kiss received 😘💖");
     }
 </script>
