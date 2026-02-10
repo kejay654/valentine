@@ -2,189 +2,266 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Will You Be My Valentine?</title>
+<title>Valentine 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-    body {
-        margin: 0;
-        font-family: 'Comic Sans MS', cursive;
-        background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
-        height: 100vh;
-        overflow-x: hidden;
-        text-align: center;
-    }
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Quicksand', sans-serif;
+}
 
-    h1 {
-        margin-top: 60px;
-        color: #ff2f6e;
-        font-size: 48px;
-    }
+/* Intro */
+.intro {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,182,193,0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+}
 
-    #message {
-        font-size: 24px;
-        margin: 20px;
-        color: #b30047;
-        min-height: 40px;
-    }
+.intro h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    color: #ff2f68;
+}
 
-    .buttons {
-        position: relative;
-        margin-top: 40px;
-        height: 150px;
-    }
+.intro button {
+    margin: 10px;
+    padding: 15px 30px;
+    border-radius: 30px;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    background: #ff4d6d;
+    color: white;
+}
 
-    button {
-        padding: 15px 30px;
-        font-size: 20px;
-        border: none;
-        border-radius: 40px;
-        cursor: pointer;
-        position: absolute;
-        transition: all 0.3s ease;
-    }
+/* Main Card */
+.container {
+    background: white;
+    padding: 45px 65px;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+    z-index: 5;
+}
 
-    #yesBtn {
-        background: #ff4d6d;
-        color: white;
-        left: 50%;
-        transform: translateX(-110%);
-    }
+h2 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    color: #ff4d6d;
+    margin-bottom: 15px;
+}
 
-    #noBtn {
-        background: #444;
-        color: white;
-        left: 50%;
-        transform: translateX(10%);
-    }
+.warning {
+    font-size: 1.1rem;
+    color: #ff2f68;
+    margin-bottom: 25px;
+}
 
-    /* Hearts */
-    .heart {
-        position: fixed;
-        color: red;
-        font-size: 20px;
-        animation: floatUp 5s linear infinite;
-    }
+/* Buttons */
+.buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
 
-    @keyframes floatUp {
-        from {
-            transform: translateY(100vh);
-            opacity: 1;
-        }
-        to {
-            transform: translateY(-10vh);
-            opacity: 0;
-        }
-    }
+button {
+    padding: 15px 35px;
+    font-size: 1.3rem;
+    border-radius: 35px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-    /* Slideshow */
-    .slideshow {
-        margin: 80px auto;
-        width: 300px;
-        height: 400px;
-        position: relative;
-    }
+#yesBtn {
+    background: #ff4d6d;
+    color: white;
+    font-weight: bold;
+}
 
-    .slide {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 20px;
+#noBtn {
+    background: #ddd;
+    position: relative;
+}
+
+/* End Screen */
+.end {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 20;
+}
+
+.endContent {
+    background: rgba(255,255,255,0.9);
+    padding: 35px 45px;
+    border-radius: 25px;
+}
+
+/* Small slideshow */
+.slideshow {
+    width: 260px;
+    height: 340px;
+    margin: 25px auto 0;
+    position: relative;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 18px;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+/* Effects */
+.heart, .confetti {
+    position: fixed;
+    pointer-events: none;
+    animation: pop 1.6s ease-out forwards;
+}
+
+.confetti {
+    width: 8px;
+    height: 14px;
+}
+
+@keyframes pop {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(1.6) translateY(-80px); opacity: 0; }
+}
+
+.float-heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 22px;
+    animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+    to {
+        transform: translateY(-110vh);
         opacity: 0;
-        transition: opacity 1s ease;
     }
-
-    .slide.active {
-        opacity: 1;
-    }
+}
 </style>
 </head>
-
 <body>
 
-<h1>Babyyy 💕 Will you be my Valentine?</h1>
-<div id="message"></div>
-
-<div class="buttons">
-    <button id="yesBtn">YES 💖</button>
-    <button id="noBtn">NO 😭</button>
+<div class="intro" id="intro">
+    <h1>Get your phone 📱<br>and start recording 🎥</h1>
+    <button onclick="startMain()">YES I’M RECORDING 😅</button>
 </div>
 
-<!-- SLIDESHOW AT THE END -->
-<div class="slideshow">
-    <img src="pic1.jpg" class="slide active">
-    <img src="pic2.jpg" class="slide">
-    <img src="pic3.jpg" class="slide">
-    <img src="pic4.jpg" class="slide">
+<div class="container" id="main">
+    <h2>Babyyy 💕<br>Will you be my Valentine?</h2>
+    <div class="warning">Don’t you dare click NO 😌</div>
+    <div class="buttons">
+        <button id="yesBtn">Yes 💖</button>
+        <button id="noBtn">No 😏</button>
+    </div>
+</div>
+
+<!-- END SCREEN -->
+<div class="end" id="end">
+    <div class="endContent">
+        <h1>I knew you’d say yes 💖<br>I love you</h1>
+
+        <div class="slideshow">
+            <img src="pic1.jpg" class="slide active">
+            <img src="pic2.jpg" class="slide">
+            <img src="pic3.jpg" class="slide">
+            <img src="pic4.jpg" class="slide">
+        </div>
+    </div>
 </div>
 
 <script>
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
-    const message = document.getElementById("message");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const intro = document.getElementById("intro");
+const main = document.getElementById("main");
+const end = document.getElementById("end");
 
-    let noScale = 1;
-    let yesScale = 1;
-    let noClicks = 0;
+let noClicks = 0;
+let noScale = 1;
+let yesScale = 1;
 
-    // Move NO button when hovered
-    noBtn.addEventListener("mouseenter", () => {
-        const x = Math.random() * 200 - 100;
-        const y = Math.random() * 100 - 50;
-        noBtn.style.transform = `translate(${x}px, ${y}px) scale(${noScale})`;
-    });
+function startMain() {
+    intro.style.display = "none";
+}
 
-    // When NO is clicked
-    noBtn.addEventListener("click", () => {
-        noClicks++;
+/* NO hover dodge */
+noBtn.addEventListener("mouseenter", () => {
+    noBtn.style.transform = `translate(${Math.random()*160-80}px, ${Math.random()*100-50}px) scale(${noScale})`;
+});
 
-        noScale -= 0.15;
-        yesScale += 0.2;
+/* NO click logic */
+noBtn.addEventListener("click", () => {
+    noClicks++;
+    noScale -= 0.2;
+    yesScale += 0.25;
 
-        message.textContent = "Why are you still clicking NO 😭";
+    noBtn.style.transform = `scale(${noScale})`;
+    yesBtn.style.transform = `scale(${yesScale})`;
 
-        noBtn.style.transform = `scale(${noScale})`;
-        yesBtn.style.transform = `translateX(-110%) scale(${yesScale})`;
-
-        // Hearts on every NO click
-        spawnHearts(10);
-
-        if (noScale <= 0.2) {
-            noBtn.style.display = "none";
-            message.textContent = "So it is a YES 💖💖💖";
-            yesBtn.style.transform = "translateX(-50%) scale(2.5)";
-        }
-    });
-
-    // YES button click
-    yesBtn.addEventListener("click", () => {
-        message.textContent = "YAYYYYY 💕 I LOVE YOU 💘";
-        spawnHearts(30);
-    });
-
-    // Hearts generator
-    function spawnHearts(amount) {
-        for (let i = 0; i < amount; i++) {
-            const heart = document.createElement("div");
-            heart.className = "heart";
-            heart.textContent = "❤️";
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.animationDuration = 3 + Math.random() * 3 + "s";
-            document.body.appendChild(heart);
-
-            setTimeout(() => heart.remove(), 5000);
-        }
+    if (noClicks >= 3) {
+        noBtn.style.opacity = "0";
+        setTimeout(() => noBtn.style.display = "none", 400);
+        yesBtn.innerText = "So it is a YES 💖";
     }
+});
 
-    // Slideshow logic
-    const slides = document.querySelectorAll(".slide");
-    let slideIndex = 0;
+/* YES click */
+yesBtn.addEventListener("click", () => {
+    main.style.display = "none";
+    end.style.display = "flex";
+});
 
-    setInterval(() => {
-        slides[slideIndex].classList.remove("active");
-        slideIndex = (slideIndex + 1) % slides.length;
-        slides[slideIndex].classList.add("active");
-    }, 3000);
+/* Floating hearts */
+setInterval(() => {
+    const h = document.createElement("div");
+    h.className = "float-heart";
+    h.innerText = "❤️";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.animationDuration = Math.random() * 3 + 4 + "s";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 7000);
+}, 300);
+
+/* Slideshow */
+let currentSlide = 0;
+const slides = document.querySelectorAll(".slide");
+
+setInterval(() => {
+    slides[currentSlide].classList.remove("active");
+    currentSlide = (currentSlide + 1) % slides.length;
+    slides[currentSlide].classList.add("active");
+}, 3000);
 </script>
 
 </body>
