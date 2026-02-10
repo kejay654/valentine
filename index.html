@@ -39,44 +39,33 @@
       font-size: 18px;
       border: none;
       border-radius: 40px;
-      cursor: pointer;
       white-space: nowrap;
     }
 
     #yesBtn {
       background: #ff4d6d;
       color: white;
+      cursor: pointer;
       box-shadow: 0 6px 20px rgba(255,77,109,0.4);
     }
 
-    /* 🚫 NO button is untouchable */
+    /* Wrapper that senses the mouse */
+    #noZone {
+      position: relative;
+      width: 140px;
+      height: 70px;
+    }
+
+    /* The NO button itself is untouchable */
     #noBtn {
       background: white;
       color: #ff4d6d;
       box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-      pointer-events: none;
-    }
-
-    /* Fake sass label */
-    #noWrapper {
-      position: relative;
-      display: inline-block;
-    }
-
-    #sass {
       position: absolute;
-      top: -28px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 14px;
-      color: white;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      left: 0;
+      top: 0;
       pointer-events: none;
-    }
-
-    #noWrapper:hover #sass {
-      opacity: 1;
+      transition: transform 0.1s ease;
     }
 
     #message {
@@ -101,8 +90,7 @@
   <div class="buttons">
     <button id="yesBtn">Yes 💕</button>
 
-    <div id="noWrapper">
-      <div id="sass">nice try 😏</div>
+    <div id="noZone">
       <button id="noBtn">No 💔</button>
     </div>
   </div>
@@ -111,8 +99,29 @@
 </div>
 
 <script>
+  const noZone = document.getElementById("noZone");
+  const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
   const message = document.getElementById("message");
+
+  noZone.addEventListener("mousemove", (e) => {
+    const rect = noZone.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    let moveX = -x * 0.4;
+    let moveY = -y * 0.4;
+
+    // Clamp movement so it NEVER escapes
+    moveX = Math.max(-25, Math.min(25, moveX));
+    moveY = Math.max(-15, Math.min(15, moveY));
+
+    noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+  });
+
+  noZone.addEventListener("mouseleave", () => {
+    noBtn.style.transform = "translate(0, 0)";
+  });
 
   yesBtn.onclick = () => {
     document.querySelector(".buttons").style.display = "none";
