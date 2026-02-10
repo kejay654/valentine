@@ -3,23 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <title>Be My Valentine 💘</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:wght@600&family=Poppins:wght@500&display=swap" rel="stylesheet">
+
   <style>
     body {
       margin: 0;
       height: 100vh;
       overflow: hidden;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Poppins', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
-    }
-
-    h1 {
-      color: #fff;
-      font-size: 3rem;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
     }
 
     #container {
@@ -27,40 +25,98 @@
       z-index: 2;
     }
 
+    h1 {
+      font-family: 'Pacifico', cursive;
+      color: #fff;
+      font-size: 3.2rem;
+      margin-bottom: 40px;
+      text-shadow: 3px 3px 10px rgba(0,0,0,0.25);
+    }
+
     button {
-      padding: 15px 30px;
+      padding: 15px 36px;
       font-size: 18px;
       border: none;
-      border-radius: 30px;
+      border-radius: 40px;
       cursor: pointer;
-      margin: 20px;
-      transition: 0.2s ease;
+      margin: 10px;
+      font-family: 'Poppins', sans-serif;
+      transition: transform 0.2s ease;
     }
 
     #yesBtn {
       background: #ff4d6d;
       color: white;
+      box-shadow: 0 8px 20px rgba(255,77,109,0.4);
     }
+
+    #yesBtn:hover { transform: scale(1.08); }
 
     #noBtn {
       background: #fff;
       color: #ff4d6d;
       position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
     }
 
     #message {
       display: none;
-      font-size: 2.5rem;
+      font-size: 2.4rem;
       color: white;
+      font-family: 'Playfair Display', serif;
       margin-top: 20px;
       animation: pop 0.6s ease;
     }
 
     @keyframes pop {
-      from { transform: scale(0.5); opacity: 0; }
+      from { transform: scale(0.6); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
 
+    /* Handwriting */
+    #signature {
+      width: 320px;
+      margin: 20px auto;
+      display: none;
+    }
+
+    path {
+      fill: none;
+      stroke: white;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: draw 3s ease forwards;
+    }
+
+    @keyframes draw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Kiss */
+    #kissBtn {
+      display: none;
+      background: white;
+      color: #ff4d6d;
+      margin-top: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    #kiss {
+      display: none;
+      font-size: 4rem;
+      animation: kissPop 0.8s ease infinite alternate;
+    }
+
+    @keyframes kissPop {
+      from { transform: scale(1); }
+      to { transform: scale(1.2); }
+    }
+
+    /* Hearts */
     .heart {
       position: absolute;
       width: 20px;
@@ -68,7 +124,7 @@
       background: red;
       transform: rotate(45deg);
       animation: float 10s linear infinite;
-      opacity: 0.7;
+      opacity: 0.6;
     }
 
     .heart::before,
@@ -89,6 +145,7 @@
       to { transform: translateY(-10vh) rotate(45deg); }
     }
 
+    /* Confetti */
     .confetti {
       position: fixed;
       width: 10px;
@@ -108,67 +165,87 @@
 </head>
 <body>
 
-  <audio id="bgMusic" loop>
-    <source src="love.mp3" type="audio/mpeg">
-  </audio>
+<audio id="bgMusic" loop>
+  <source src="love.mp3" type="audio/mpeg">
+</audio>
 
-  <div id="container">
-    <h1>Will you be my Valentine, Babyyy (Giboin)? 💘</h1>
-    <button id="yesBtn">Yes 💕</button>
-    <button id="noBtn">No 💔</button>
+<div id="container">
+  <h1>Will you be my Valentine, Babyyy? 💘</h1>
 
-    <div id="message">
-      I knew you would say YES 😘<br>
-      I LOVE YOU, Babyyy (Giboin) ❤️
-    </div>
+  <button id="yesBtn">Yes 💕</button>
+  <button id="noBtn">No 💔</button>
+
+  <div id="message">
+    I knew you would say YES 😘<br>I LOVE YOU
   </div>
 
-  <script>
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
-    const message = document.getElementById("message");
-    const music = document.getElementById("bgMusic");
+  <!-- Handwritten Name -->
+  <svg id="signature" viewBox="0 0 400 120">
+    <path d="M20 80 Q40 20 80 80 T160 80 Q180 40 200 80 T260 80 Q280 40 320 80" />
+  </svg>
 
-    noBtn.addEventListener("mouseover", () => {
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 100);
+  <button id="kissBtn">Send me a kiss 😘</button>
+  <div id="kiss">💋</div>
+</div>
+
+<script>
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const message = document.getElementById("message");
+  const music = document.getElementById("bgMusic");
+  const signature = document.getElementById("signature");
+  const kissBtn = document.getElementById("kissBtn");
+  const kiss = document.getElementById("kiss");
+
+  document.addEventListener("mousemove", e => {
+    const rect = noBtn.getBoundingClientRect();
+    const dx = rect.left + rect.width/2 - e.clientX;
+    const dy = rect.top + rect.height/2 - e.clientY;
+    if (Math.hypot(dx, dy) < 120) {
+      let x = rect.left + dx * 0.15;
+      let y = rect.top + dy * 0.15;
+      x = Math.max(20, Math.min(window.innerWidth - rect.width - 20, x));
+      y = Math.max(20, Math.min(window.innerHeight - rect.height - 20, y));
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";
-    });
-
-    yesBtn.addEventListener("click", () => {
-      message.style.display = "block";
-      yesBtn.style.display = "none";
-      noBtn.style.display = "none";
-      music.play();
-      launchConfetti();
-    });
-
-    for (let i = 0; i < 25; i++) {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (6 + Math.random() * 6) + "s";
-      heart.style.opacity = Math.random();
-      heart.style.transform =
-        "scale(" + (0.5 + Math.random()) + ") rotate(45deg)";
-      document.body.appendChild(heart);
     }
+  });
 
-    function launchConfetti() {
-      const colors = ["#ff4d6d", "#ffd166", "#4cc9f0", "#ffffff", "#ff9a9e"];
-      for (let i = 0; i < 150; i++) {
-        const confetti = document.createElement("div");
-        confetti.className = "confetti";
-        confetti.style.left = Math.random() * 100 + "vw";
-        confetti.style.backgroundColor =
-          colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.animationDuration = 2 + Math.random() * 2 + "s";
-        document.body.appendChild(confetti);
-        setTimeout(() => confetti.remove(), 4000);
-      }
+  yesBtn.onclick = () => {
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+    message.style.display = "block";
+    signature.style.display = "block";
+    kissBtn.style.display = "inline-block";
+    music.play();
+    launchConfetti();
+  };
+
+  kissBtn.onclick = () => {
+    kiss.style.display = "block";
+  };
+
+  for (let i = 0; i < 25; i++) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (6 + Math.random() * 6) + "s";
+    heart.style.opacity = Math.random();
+    document.body.appendChild(heart);
+  }
+
+  function launchConfetti() {
+    const colors = ["#ff4d6d","#ffd166","#4cc9f0","#fff"];
+    for (let i = 0; i < 120; i++) {
+      const c = document.createElement("div");
+      c.className = "confetti";
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4000);
     }
-  </script>
+  }
+</script>
 
 </body>
 </html>
