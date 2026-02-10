@@ -29,6 +29,7 @@
     font-size: 3rem;
     margin-bottom: 30px;
     text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    position: relative;
   }
 
   button {
@@ -56,7 +57,8 @@
     background: white;
     color: #ff4d6d;
     box-shadow: 0 6px 15px rgba(0,0,0,0.25);
-    pointer-events: none;
+    pointer-events: none; /* impossible to click */
+    white-space: nowrap;
   }
 
   #message {
@@ -68,7 +70,6 @@
   .heart {
     position: absolute;
     color: rgba(255,255,255,0.7);
-    font-size: 20px;
     animation: floatUp linear infinite;
   }
 
@@ -90,16 +91,18 @@
 <!-- START SCREEN -->
 <div id="startScreen" class="center">
   <h1>Before we start… 🎥</h1>
-  <p>Please take a video recording of your screen 😏</p>
+  <p>Please take a screen recording 😏</p>
   <button id="startBtn">Yes, I’m recording 📹</button>
 </div>
 
 <!-- MAIN SCREEN -->
 <div id="mainScreen" class="center" style="display:none;">
-  <h1>Babyyy, will you be my Valentine? 💘</h1>
+  <h1 id="question">Babyyy, will you be my Valentine? 💘</h1>
 
-  <button id="yesBtn">Yes 💕</button>
-  <button id="noBtn">No 😏</button>
+  <div style="position: relative;">
+    <button id="yesBtn">Yes 💕</button>
+    <button id="noBtn">No 😏</button>
+  </div>
 
   <div id="message">I knew you’d say YES, Babyyy 💖</div>
 </div>
@@ -109,49 +112,67 @@
   const startScreen = document.getElementById("startScreen");
   const mainScreen = document.getElementById("mainScreen");
 
+  const question = document.getElementById("question");
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
   const message = document.getElementById("message");
 
   const sass = [
     "nice try 😏",
-    "uh uh 😜",
-    "almost 😈",
-    "not today 😘",
-    "keep trying 💅"
+    "almost 😜",
+    "uh uh 😈",
+    "keep trying 💅",
+    "hehe nope 😘"
   ];
 
-  let noX = window.innerWidth / 2 + 80;
-  let noY = window.innerHeight / 2;
-
-  noBtn.style.left = noX + "px";
-  noBtn.style.top = noY + "px";
+  let angle = 0;
+  let orbiting = false;
 
   startBtn.onclick = () => {
     startScreen.style.display = "none";
     mainScreen.style.display = "block";
     createHearts(15);
+
+    // Start NO button beside YES
+    const yesRect = yesBtn.getBoundingClientRect();
+    noBtn.style.left = yesRect.right + 10 + "px";
+    noBtn.style.top = yesRect.top + "px";
   };
 
   document.addEventListener("mousemove", (e) => {
-    const rect = noBtn.getBoundingClientRect();
-    const dx = rect.left + rect.width / 2 - e.clientX;
-    const dy = rect.top + rect.height / 2 - e.clientY;
-    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (!orbiting) {
+      const rect = noBtn.getBoundingClientRect();
+      const dx = rect.left + rect.width / 2 - e.clientX;
+      const dy = rect.top + rect.height / 2 - e.clientY;
+      const dist = Math.sqrt(dx*dx + dy*dy);
 
-    if (dist < 120) {
-      noX += dx * 0.6;
-      noY += dy * 0.6;
+      if (dist < 120) orbiting = true;
+    }
+  });
 
-      noX = Math.max(10, Math.min(noX, window.innerWidth - rect.width - 10));
-      noY = Math.max(10, Math.min(noY, window.innerHeight - rect.height - 10));
+  function orbitNo() {
+    if (orbiting) {
+      const qRect = question.getBoundingClientRect();
 
-      noBtn.style.left = noX + "px";
-      noBtn.style.top = noY + "px";
+      const centerX = qRect.left + qRect.width / 2;
+      const centerY = qRect.top + qRect.height / 2;
+
+      const radiusX = qRect.width / 2 + 40;
+      const radiusY = qRect.height / 2 + 10;
+
+      angle += 0.04;
+
+      const x = centerX + Math.cos(angle) * radiusX - noBtn.offsetWidth / 2;
+      const y = centerY + Math.sin(angle) * radiusY - noBtn.offsetHeight / 2;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
 
       noBtn.textContent = sass[Math.floor(Math.random() * sass.length)];
     }
-  });
+
+    requestAnimationFrame(orbitNo);
+  }
 
   yesBtn.onclick = () => {
     yesBtn.style.display = "none";
@@ -166,13 +187,15 @@
       heart.className = "heart";
       heart.textContent = "❤️";
       heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (4 + Math.random() * 4) + "s";
       heart.style.fontSize = (16 + Math.random() * 24) + "px";
+      heart.style.animationDuration = (4 + Math.random() * 4) + "s";
       document.body.appendChild(heart);
 
       setTimeout(() => heart.remove(), 8000);
     }
   }
+
+  orbitNo();
 </script>
 
 </body>
