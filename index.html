@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Valentine 💖</title>
 
-<!-- Cute Font -->
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
@@ -19,7 +18,6 @@
         font-family: 'Quicksand', sans-serif;
     }
 
-    /* Intro Screen */
     .intro {
         position: fixed;
         inset: 0;
@@ -50,7 +48,6 @@
         color: white;
     }
 
-    /* Main Card */
     .container {
         background: white;
         padding: 45px 65px;
@@ -71,7 +68,6 @@
         display: flex;
         gap: 20px;
         justify-content: center;
-        position: relative;
     }
 
     button {
@@ -98,18 +94,6 @@
         position: relative;
     }
 
-    /* Sassy text */
-    .sass {
-        position: fixed;
-        top: 20px;
-        font-size: 1.2rem;
-        color: #ff2f68;
-        font-weight: bold;
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
-
-    /* Hearts */
     .heart {
         position: fixed;
         bottom: -20px;
@@ -124,19 +108,47 @@
             opacity: 0;
         }
     }
+
+    /* End Screen */
+    .end {
+        position: fixed;
+        inset: 0;
+        background: rgba(255, 182, 193, 0.97);
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        z-index: 20;
+    }
+
+    .end h1 {
+        font-family: 'Pacifico', cursive;
+        font-size: 3rem;
+        color: #ff2f68;
+        margin-bottom: 25px;
+    }
+
+    .end button {
+        padding: 15px 40px;
+        font-size: 1.3rem;
+        border-radius: 35px;
+        border: none;
+        background: #ff4d6d;
+        color: white;
+        cursor: pointer;
+    }
 </style>
 </head>
 <body>
 
-<!-- Intro -->
 <div class="intro" id="intro">
     <h1>Get your phone 📱<br>and start recording 🎥</h1>
-    <button onclick="nextStep()">I’m recording</button>
-    <button onclick="startMain()">Yes yes, I’m REALLY recording 😅</button>
+    <button onclick="alert('Okay good 😏 but don’t blink')">I’m recording</button>
+    <button onclick="startMain()">YES I’M REALLY RECORDING 😅</button>
 </div>
 
-<!-- Main -->
-<div class="container">
+<div class="container" id="main">
     <h2>Babyyy 💕<br>Will you be my Valentine?</h2>
     <div class="buttons">
         <button id="yesBtn">Yes 💖</button>
@@ -144,58 +156,66 @@
     </div>
 </div>
 
-<div class="sass" id="sass">Nice try 😌</div>
+<div class="end" id="end">
+    <h1>I know you would say yes baby 💖<br>I love you</h1>
+    <button onclick="sendKiss()">Send me a kiss 😘</button>
+</div>
 
 <script>
     const noBtn = document.getElementById("noBtn");
-    const sass = document.getElementById("sass");
     const intro = document.getElementById("intro");
+    const main = document.getElementById("main");
+    const end = document.getElementById("end");
 
-    function nextStep() {
-        alert("Okay good 😏 but make sure it’s rolling...");
-    }
+    const sassLines = [
+        "Nice try 😌",
+        "Almost 😏",
+        "You thought 😂",
+        "Not today 💅",
+        "Too slow 😜"
+    ];
 
     function startMain() {
         intro.style.display = "none";
     }
 
-    // Keep No button inside screen
     noBtn.addEventListener("mouseenter", () => {
-        sass.style.opacity = 1;
-        setTimeout(() => sass.style.opacity = 0, 800);
+        const randomLine = sassLines[Math.floor(Math.random() * sassLines.length)];
+        noBtn.innerText = randomLine;
 
-        const maxX = window.innerWidth / 4;
-        const maxY = window.innerHeight / 6;
-
-        const x = Math.random() * maxX - maxX / 2;
-        const y = Math.random() * maxY - maxY / 2;
-
+        const x = Math.random() * 200 - 100;
+        const y = Math.random() * 120 - 60;
         noBtn.style.transform = `translate(${x}px, ${y}px)`;
+
+        setTimeout(() => {
+            noBtn.innerText = "No 😏";
+        }, 900);
     });
 
-    // Hearts
     function createHeart(amount = 1) {
         for (let i = 0; i < amount; i++) {
             const heart = document.createElement("div");
             heart.className = "heart";
             heart.innerText = "❤️";
             heart.style.left = Math.random() * 100 + "vw";
-            heart.style.fontSize = Math.random() * 20 + 15 + "px";
             heart.style.animationDuration = Math.random() * 3 + 4 + "s";
             document.body.appendChild(heart);
-
             setTimeout(() => heart.remove(), 7000);
         }
     }
 
-    // Background hearts
     setInterval(() => createHeart(1), 300);
 
-    // YES button explosion
     document.getElementById("yesBtn").addEventListener("click", () => {
         createHeart(50);
-        alert("YAYYYYY 💘 I knew it 😭❤️");
+        main.style.display = "none";
+        end.style.display = "flex";
     });
+
+    function sendKiss() {
+        createHeart(40);
+        alert("Kiss received 😘💖");
+    }
 </script>
 
 </body>
