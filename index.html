@@ -30,10 +30,7 @@
         z-index: 10;
     }
 
-    .end {
-        display: none;
-        z-index: 20;
-    }
+    .end { display: none; z-index: 20; }
 
     .intro h1, .end h1 {
         font-family: 'Pacifico', cursive;
@@ -50,7 +47,6 @@
         background: #ff4d6d;
         color: white;
         cursor: pointer;
-        margin-top: 10px;
     }
 
     .container {
@@ -60,7 +56,7 @@
         text-align: center;
         box-shadow: 0 25px 45px rgba(0,0,0,0.2);
         position: relative;
-        z-index: 5;
+        width: 420px;
     }
 
     h2 {
@@ -71,10 +67,8 @@
     }
 
     .buttons {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
         position: relative;
+        height: 80px;
     }
 
     button {
@@ -83,31 +77,35 @@
         border-radius: 35px;
         border: none;
         cursor: pointer;
+        position: absolute;
     }
 
     #yesBtn {
         background: #ff4d6d;
         color: white;
-        font-weight: bold;
+        left: 60px;
     }
 
     #noBtn {
         background: #ddd;
-        position: absolute;
-        right: -120px;
+        right: 60px;
     }
 
-    .heart {
+    .heart, .confetti {
         position: fixed;
-        font-size: 22px;
         pointer-events: none;
         animation: pop 1.5s ease-out forwards;
     }
 
+    .confetti {
+        width: 8px;
+        height: 14px;
+        background: red;
+    }
+
     @keyframes pop {
         0% { transform: scale(0); opacity: 1; }
-        50% { transform: scale(1.4); }
-        100% { transform: scale(0); opacity: 0; }
+        100% { transform: scale(1.4); opacity: 0; }
     }
 </style>
 </head>
@@ -115,13 +113,12 @@
 
 <div class="intro" id="intro">
     <h1>Get your phone 📱<br>and start recording 🎥</h1>
-    <button onclick="alert('Okay good 😏 but don’t blink')">I’m recording</button>
-    <button onclick="startMain()">YES I’M REALLY RECORDING 😅</button>
+    <button onclick="startMain()">YES I’M RECORDING 😅</button>
 </div>
 
 <div class="container" id="main">
     <h2>Babyyy 💕<br>Will you be my Valentine?</h2>
-    <div class="buttons">
+    <div class="buttons" id="btnArea">
         <button id="yesBtn">Yes 💖</button>
         <button id="noBtn">No 😏</button>
     </div>
@@ -134,70 +131,71 @@
 
 <script>
     const noBtn = document.getElementById("noBtn");
+    const btnArea = document.getElementById("btnArea");
     const intro = document.getElementById("intro");
     const main = document.getElementById("main");
     const end = document.getElementById("end");
 
-    const sassLines = [
-        "Nice try 😌",
-        "Too slow 😜",
-        "You thought 😂",
-        "Not happening 💅",
-        "Almost 😏"
-    ];
+    const sass = ["Nice try 😌","Too slow 😜","You thought 😂","Nope 💅"];
 
     function startMain() {
         intro.style.display = "none";
     }
 
-    function moveNoButton() {
-        const randomLine = sassLines[Math.floor(Math.random() * sassLines.length)];
-        noBtn.innerText = randomLine;
+    function moveNo() {
+        const area = btnArea.getBoundingClientRect();
+        const maxX = area.width - noBtn.offsetWidth;
+        const maxY = area.height - noBtn.offsetHeight;
 
-        const padding = 120;
-        const x = Math.random() * (window.innerWidth - padding * 2) + padding;
-        const y = Math.random() * (window.innerHeight - padding * 2) + padding;
-
-        noBtn.style.left = x + "px";
-        noBtn.style.top = y + "px";
+        noBtn.innerText = sass[Math.floor(Math.random()*sass.length)];
+        noBtn.style.left = Math.random() * maxX + "px";
+        noBtn.style.top = Math.random() * maxY + "px";
 
         setTimeout(() => noBtn.innerText = "No 😏", 700);
     }
 
-    noBtn.addEventListener("mouseenter", moveNoButton);
-    noBtn.addEventListener("mousemove", moveNoButton);
+    noBtn.addEventListener("mouseenter", moveNo);
+    noBtn.addEventListener("mousemove", moveNo);
 
-    function heartFirework(x, y, amount = 15) {
-        for (let i = 0; i < amount; i++) {
-            const heart = document.createElement("div");
-            heart.className = "heart";
-            heart.innerText = "❤️";
-            heart.style.left = x + Math.random() * 120 - 60 + "px";
-            heart.style.top = y + Math.random() * 120 - 60 + "px";
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 1500);
-        }
+    function heart(x,y) {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.innerText = "❤️";
+        h.style.left = x+"px";
+        h.style.top = y+"px";
+        document.body.appendChild(h);
+        setTimeout(()=>h.remove(),1500);
     }
 
-    document.getElementById("yesBtn").addEventListener("click", () => {
-        main.style.display = "none";
-        end.style.display = "flex";
+    function confetti(x,y) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = x+"px";
+        c.style.top = y+"px";
+        c.style.background = `hsl(${Math.random()*360},100%,60%)`;
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),1500);
+    }
 
-        setInterval(() => {
-            heartFirework(
-                Math.random() * window.innerWidth,
-                Math.random() * window.innerHeight,
-                20
-            );
-        }, 400);
-    });
+    document.getElementById("yesBtn").onclick = () => {
+        for(let i=0;i<40;i++){
+            heart(Math.random()*innerWidth,Math.random()*innerHeight);
+            confetti(Math.random()*innerWidth,Math.random()*innerHeight);
+        }
+        main.style.display="none";
+        end.style.display="flex";
 
-    function sendKiss() {
-        heartFirework(
-            window.innerWidth / 2,
-            window.innerHeight / 2,
-            30
-        );
+        setInterval(()=>{
+            for(let i=0;i<15;i++){
+                heart(Math.random()*innerWidth,Math.random()*innerHeight);
+            }
+        },400);
+    };
+
+    function sendKiss(){
+        for(let i=0;i<30;i++){
+            heart(innerWidth/2,innerHeight/2);
+        }
         alert("Kiss received 😘💖");
     }
 </script>
