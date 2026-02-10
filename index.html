@@ -27,12 +27,14 @@
       font-family: 'Pacifico', cursive;
       font-size: 3rem;
       color: white;
-      margin-bottom: 40px;
+      margin-bottom: 60px;
       text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+      position: relative;
+      display: inline-block;
     }
 
     button {
-      padding: 15px 36px;
+      padding: 14px 34px;
       font-size: 18px;
       border: none;
       border-radius: 40px;
@@ -71,7 +73,7 @@
 <body>
 
 <div id="container">
-  <h1>Will you be my Valentine? 💘</h1>
+  <h1 id="question">Will you be my Valentine? 💘</h1>
 
   <button id="yesBtn">Yes 💕</button>
   <button id="noBtn">No 😏</button>
@@ -83,37 +85,43 @@
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
   const message = document.getElementById("message");
+  const question = document.getElementById("question");
 
-  // Initial position near the question
-  let noX = 120;
-  let noY = 0;
+  // Start near the text
+  let posX = 20;
+  let posY = 10;
 
-  noBtn.style.transform = `translate(${noX}px, ${noY}px)`;
+  noBtn.style.transform = `translate(${posX}px, ${posY}px)`;
 
   document.addEventListener("mousemove", (e) => {
-    const rect = noBtn.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+    const textRect = question.getBoundingClientRect();
 
-    const btnCenterX = rect.left + rect.width / 2;
-    const btnCenterY = rect.top + rect.height / 2;
+    const btnCenterX = btnRect.left + btnRect.width / 2;
+    const btnCenterY = btnRect.top + btnRect.height / 2;
 
     const dx = btnCenterX - e.clientX;
     const dy = btnCenterY - e.clientY;
-
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    const repelDistance = 120; // 👈 THIS controls how far it stays away
+    const repelDistance = 110;
 
     if (distance < repelDistance) {
       const angle = Math.atan2(dy, dx);
 
-      noX += Math.cos(angle) * 20;
-      noY += Math.sin(angle) * 20;
+      posX += Math.cos(angle) * 25;
+      posY += Math.sin(angle) * 25;
 
-      // Keep inside viewport
-      noX = Math.max(-window.innerWidth / 2 + 60, Math.min(noX, window.innerWidth / 2 - 60));
-      noY = Math.max(-window.innerHeight / 2 + 60, Math.min(noY, window.innerHeight / 2 - 60));
+      // Constrain movement INSIDE the text area
+      const minX = textRect.left - question.offsetLeft - 20;
+      const maxX = textRect.width - noBtn.offsetWidth + 20;
+      const minY = -question.offsetHeight / 2;
+      const maxY = question.offsetHeight / 2;
 
-      noBtn.style.transform = `translate(${noX}px, ${noY}px)`;
+      posX = Math.max(minX, Math.min(posX, maxX));
+      posY = Math.max(minY, Math.min(posY, maxY));
+
+      noBtn.style.transform = `translate(${posX}px, ${posY}px)`;
     }
   });
 
